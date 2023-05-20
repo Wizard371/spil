@@ -6,17 +6,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Minigames</title>
 </head>
 
 <body>
     <nav>
-        <h1>Spil</h1>
+        <h1>S P I L</h1>
     </nav>
     <div class="container">
         <div class="parent">
-            <button id="start-button" onclick="openGamePopup()">QUIZ SPIL</button>
-            <button id="open-popup">KRYDS OG BOLLE</button>
+            <button id="start-button" class="åben-button" onclick="openGamePopup()">QUIZ SPIL</button>
+            <button id="open-popup" class="åben-button">KRYDS OG BOLLE</button>
             <!-- Quiz Spil -->
             <div id="game-popup" class="game-popup">
                 <div class="game-popup-content">
@@ -54,7 +54,7 @@
                         </tr>
                     </table>
                     <div id="result"></div>
-                    <button id="reset">Genstart</button>
+                    <button id="reset" class="game-btn">Genstart</button>
                     <button id="close-game-button" onclick="closeGamePopupKryds()" class="close-game-btn">Luk spil</button>
                     <button id="ai-button" class="ai-button">Spil imod anden spiller</button>
 
