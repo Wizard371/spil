@@ -16,22 +16,22 @@ function sendWebhookMessage(correctAnswers, wrongAnswers) {
                 {
                     name: 'Forkerte Svar',
                     value: wrongAnswers.toString(),
-                }
-            ]
-        }]
+                },
+            ],
+        }, ],
     };
 
     fetch(webhookUrl, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
-            body: JSON.stringify(message)
+            body: JSON.stringify(message),
         })
         .then(() => {
             console.log('Webhook sendt! :)');
         })
-        .catch(error => {
+        .catch((error) => {
             console.error('Fejl:', error);
         });
 }
@@ -39,15 +39,15 @@ function sendWebhookMessage(correctAnswers, wrongAnswers) {
 function fetchQuestions() {
     fetch('https://opentdb.com/api.php?amount=15&category=9&difficulty=medium', {
             headers: {
-                'Accept-Charset': 'utf-8'
-            }
+                'Accept-Charset': 'utf-8',
+            },
         })
-        .then(response => response.json())
-        .then(data => {
+        .then((response) => response.json())
+        .then((data) => {
             handleQuestions(data.results);
             showQuestion(currentQuestionIndex);
         })
-        .catch(error => {
+        .catch((error) => {
             console.error('Error fetching questions:', error);
         });
 }
@@ -60,7 +60,6 @@ function showQuestion(questionIndex) {
     const questionContainer = document.getElementById('question-container');
     const optionsContainer = document.getElementById('options-container');
     const submitButton = document.getElementById('submit-button');
-    const nextButton = document.getElementById('next-button');
     const startButton = document.querySelector('.start-btn');
     const questionsRemaining = window.quizQuestions.length - currentQuestionIndex;
     const questionsAnswered = currentQuestionIndex;
@@ -71,7 +70,6 @@ function showQuestion(questionIndex) {
     if (questionIndex >= window.quizQuestions.length) {
         questionContainer.innerText = 'Quiz færdig!';
         submitButton.disabled = true;
-        nextButton.disabled = true;
         showScore();
     } else {
         const question = window.quizQuestions[questionIndex].question;
@@ -82,7 +80,7 @@ function showQuestion(questionIndex) {
         const allAnswers = [...wrongAnswers, correctAnswer];
         const shuffledAnswers = shuffleArray(allAnswers);
 
-        shuffledAnswers.forEach(answer => {
+        shuffledAnswers.forEach((answer) => {
             const radioDiv = document.createElement('div');
             radioDiv.classList.add('radio-item');
 
@@ -97,31 +95,55 @@ function showQuestion(questionIndex) {
             radioDiv.appendChild(radioBtn);
             radioDiv.appendChild(label);
             optionsContainer.appendChild(radioDiv);
-        });
 
-        submitButton.disabled = false;
-        nextButton.disabled = true;
-
-        resetAnswerColors();
-
-        const radioButtons = document.querySelectorAll('input[name="answer"]');
-        radioButtons.forEach(radioBtn => {
-            radioBtn.addEventListener('click', function() {
-                if (submitButton.disabled) {
-                    radioBtn.checked = false;
+            // Add event listener to the radioDiv
+            radioDiv.addEventListener('click', function() {
+                const currentSelected = document.querySelector('.radio-item.selected');
+                if (currentSelected) {
+                    currentSelected.classList.remove('selected');
+                    currentSelected.querySelector('input[type="radio"]').checked = false;
                 }
+                radioBtn.checked = true;
+                radioDiv.classList.add('selected');
             });
         });
 
-        questionContainer.innerHTML += ` (Questions Remaining: ${questionsRemaining}, Questions Answered: ${questionsAnswered})`;
+        submitButton.disabled = false;
+
+        resetAnswerColors();
+
+        // Create the questions info container
+        const questionsInfoContainer = document.createElement('div');
+        questionsInfoContainer.classList.add('questions-info-container');
+
+        // Create the questions remaining label
+        const questionsRemainingLabel = document.createElement('span');
+        questionsRemainingLabel.innerHTML = `Spørgsmål tilbage: ${questionsRemaining}`;
+        questionsRemainingLabel.classList.add('questions-label', 'questions-remaining');
+
+        // Create the questions answered label
+        const questionsAnsweredLabel = document.createElement('span');
+        questionsAnsweredLabel.innerHTML = `Spørgsmål besvaret: ${questionsAnswered}`;
+        questionsAnsweredLabel.classList.add('questions-label', 'questions-answered');
+
+        // Append labels to the questions info container
+        questionsInfoContainer.appendChild(questionsRemainingLabel);
+        questionsInfoContainer.appendChild(questionsAnsweredLabel);
+
+        // Append the questions info container to the question container
+        questionContainer.appendChild(questionsInfoContainer);
     }
 
     startButton.disabled = true;
 }
 
+
+
+
+
 function resetAnswerColors() {
     const answerOptions = document.querySelectorAll('label');
-    answerOptions.forEach(option => {
+    answerOptions.forEach((option) => {
         option.style.color = 'black';
     });
 }
@@ -137,13 +159,12 @@ function shuffleArray(array) {
 function submitAnswer() {
     const selectedAnswer = document.querySelector('input[name="answer"]:checked');
     const submitButton = document.getElementById('submit-button');
-    const nextButton = document.getElementById('next-button');
     const optionsContainer = document.getElementById('options-container');
     const resultContainer = document.getElementById('result-container');
 
     if (selectedAnswer) {
         const radioButtons = document.querySelectorAll('input[name="answer"]');
-        radioButtons.forEach(radioBtn => {
+        radioButtons.forEach((radioBtn) => {
             radioBtn.disabled = true;
         });
 
@@ -158,9 +179,11 @@ function submitAnswer() {
             resultText.style.color = 'green';
         } else {
             selectedAnswer.parentNode.classList.add('wrong');
-            const correctOption = document.querySelector(`input[value="${currentQuestion.correct_answer}"]`);
+            const correctOption = document.querySelector(
+                `input[value="${currentQuestion.correct_answer}"]`
+            );
             correctOption.parentNode.classList.add('correct');
-            radioButtons.forEach(radioBtn => {
+            radioButtons.forEach((radioBtn) => {
                 if (radioBtn.value !== currentQuestion.correct_answer) {
                     radioBtn.parentNode.classList.add('wrong');
                 }
@@ -173,10 +196,9 @@ function submitAnswer() {
         resultContainer.appendChild(resultText);
 
         submitButton.disabled = true;
-        nextButton.disabled = false;
 
         const answerOptions = document.querySelectorAll('label');
-        answerOptions.forEach(option => {
+        answerOptions.forEach((option) => {
             if (option.classList.contains('correct')) {
                 option.style.color = 'green';
             } else if (option.classList.contains('wrong')) {
@@ -184,7 +206,9 @@ function submitAnswer() {
             }
         });
 
-        nextQuestion(); // Automatically go to the next question
+        setTimeout(() => {
+            nextQuestion();
+        }, 2000); // Add a delay of 2 seconds before moving to the next question
     }
 }
 
@@ -214,3 +238,7 @@ function closeGamePopup() {
     document.getElementById('game-popup').style.display = 'none';
     document.getElementById('game-container').style.display = 'none';
 }
+
+// Add event listeners
+document.getElementById('submit-button').addEventListener('click', submitAnswer);
+document.getElementById('next-button').addEventListener('click', nextQuestion);

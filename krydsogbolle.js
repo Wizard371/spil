@@ -45,6 +45,8 @@ function handleCellClick(clickedCell, clickedCellIndex) {
 
 function checkResult() {
     let roundWon = false;
+    let winningPlayer = currentPlayer === 'X' ? 'O' : 'X';
+
     for (let i = 0; i < winCombinations.length; i++) {
         const [a, b, c] = winCombinations[i];
         if (
@@ -58,7 +60,7 @@ function checkResult() {
     }
 
     if (roundWon) {
-        announceResult(`${currentPlayer} vandt!`);
+        announceResult(`${winningPlayer} vandt!`);
         gameActive = false;
         return;
     }
@@ -90,7 +92,7 @@ function resetGame() {
 function toggleAgainstAI() {
     againstAI = !againstAI;
     const aiButton = document.getElementById('ai-button');
-    aiButton.textContent = againstAI ? 'Spil imod anden spiller' : 'Spil imod Minimax AI';
+    aiButton.textContent = againstAI ? 'Spil imod anden spiller' : 'Spil imod AI';
     resetGame();
 }
 
