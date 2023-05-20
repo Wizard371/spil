@@ -18,7 +18,7 @@ function sendWebhookMessage(correctAnswers, wrongAnswers) {
                     value: wrongAnswers.toString(),
                 },
             ],
-        }, ],
+        }],
     };
 
     fetch(webhookUrl, {
@@ -61,8 +61,8 @@ function showQuestion(questionIndex) {
     const optionsContainer = document.getElementById('options-container');
     const submitButton = document.getElementById('submit-button');
     const startButton = document.querySelector('.start-btn');
-    const questionsRemaining = window.quizQuestions.length - currentQuestionIndex;
-    const questionsAnswered = currentQuestionIndex;
+    const questionsRemaining = window.quizQuestions.length - questionIndex;
+    const questionsAnswered = questionIndex;
 
     questionContainer.innerHTML = '';
     optionsContainer.innerHTML = '';
@@ -96,10 +96,9 @@ function showQuestion(questionIndex) {
             radioDiv.appendChild(label);
             optionsContainer.appendChild(radioDiv);
 
-            // Add event listener to the radioDiv
             radioDiv.addEventListener('click', function() {
                 const currentSelected = document.querySelector('.radio-item.selected');
-                if (currentSelected) {
+                if (currentSelected && currentSelected !== radioDiv) {
                     currentSelected.classList.remove('selected');
                     currentSelected.querySelector('input[type="radio"]').checked = false;
                 }
@@ -112,34 +111,25 @@ function showQuestion(questionIndex) {
 
         resetAnswerColors();
 
-        // Create the questions info container
         const questionsInfoContainer = document.createElement('div');
         questionsInfoContainer.classList.add('questions-info-container');
 
-        // Create the questions remaining label
         const questionsRemainingLabel = document.createElement('span');
         questionsRemainingLabel.innerHTML = `Spørgsmål tilbage: ${questionsRemaining}`;
         questionsRemainingLabel.classList.add('questions-label', 'questions-remaining');
 
-        // Create the questions answered label
         const questionsAnsweredLabel = document.createElement('span');
         questionsAnsweredLabel.innerHTML = `Spørgsmål besvaret: ${questionsAnswered}`;
         questionsAnsweredLabel.classList.add('questions-label', 'questions-answered');
 
-        // Append labels to the questions info container
         questionsInfoContainer.appendChild(questionsRemainingLabel);
         questionsInfoContainer.appendChild(questionsAnsweredLabel);
 
-        // Append the questions info container to the question container
         questionContainer.appendChild(questionsInfoContainer);
     }
 
     startButton.disabled = true;
 }
-
-
-
-
 
 function resetAnswerColors() {
     const answerOptions = document.querySelectorAll('label');
@@ -208,14 +198,18 @@ function submitAnswer() {
 
         setTimeout(() => {
             nextQuestion();
-        }, 2000); // Add a delay of 2 seconds before moving to the next question
+        }, 500);
     }
 }
 
 function nextQuestion() {
-    currentQuestionIndex++;
-    showQuestion(currentQuestionIndex);
-    resetAnswerColors();
+    if (currentQuestionIndex < window.quizQuestions.length - 1) {
+        currentQuestionIndex++;
+        showQuestion(currentQuestionIndex);
+        resetAnswerColors();
+    } else {
+        showQuestion(window.quizQuestions.length);
+    }
 }
 
 function showScore() {
@@ -239,6 +233,5 @@ function closeGamePopup() {
     document.getElementById('game-container').style.display = 'none';
 }
 
-// Add event listeners
 document.getElementById('submit-button').addEventListener('click', submitAnswer);
 document.getElementById('next-button').addEventListener('click', nextQuestion);
