@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="./style.css">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <nav>
+        <h1>Spil</h1>
+    </nav>
+    <div class="container">
+        <div class="parent">
+            <button onclick="openGamePopup()">QUIZ SPIL</button>
+            <button id="open-popup">KRYDS OG BOLLE</button>
+            <!-- Quiz Spil -->
+            <div id="game-popup" class="game-popup">
+                <div class="game-popup-content">
+                    <div id="game-container" class="game-container">
+                        <div id="question-container"></div>
+                        <div id="options-container"></div>
+                        <button id="submit-button" onclick="submitAnswer()" class="game-btn">Vælg svar</button>
+                        <div id="result-container"></div>
+                        <div id="score-container"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- KRYDS OG BOLLE -->
+            <div id="popup-container" class="popup-container">
+                <div class="popup-content">
+
+                    <table>
+                        <tr>
+                            <td class="cell" id="cell-0"></td>
+                            <td class="cell" id="cell-1"></td>
+                            <td class="cell" id="cell-2"></td>
+                        </tr>
+                        <tr>
+                            <td class="cell" id="cell-3"></td>
+                            <td class="cell" id="cell-4"></td>
+                            <td class="cell" id="cell-5"></td>
+                        </tr>
+                        <tr>
+                            <td class="cell" id="cell-6"></td>
+                            <td class="cell" id="cell-7"></td>
+                            <td class="cell" id="cell-8"></td>
+                        </tr>
+                    </table>
+                    <div id="result"></div>
+                    <button id="reset">Genstart</button>
+                    <button id="close-game-button" onclick="closeGamePopupKryds()" class="close-game-btn">Luk spil</button>
+                    <button id="ai-button" class="ai-button">Spil imod anden spiller</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/he/1.2.0/he.js"></script>
+    <script src="./quiz.js"></script>
+    <script src="./krydsogbolle.js"></script>
+
+</body>
+
+</html>
