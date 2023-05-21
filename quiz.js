@@ -234,4 +234,4 @@ function closeGamePopup() {
 }
 
 document.getElementById('submit-button').addEventListener('click', submitAnswer);
-document.getElementById('next-button').addEventListener('click', nextQuestion);
+// document.getElementById('next-button').addEventListener('click', nextQuestion);
