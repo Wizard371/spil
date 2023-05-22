@@ -63,12 +63,38 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         solveSudoku();
-        removeNumbers(grid, 0.5); // Sværheds grad
+        removeNumbers(grid, 0.5); // Difficulty level
 
         return grid;
     };
 
-    const validateGrid = (grid) => {
+    const isValidValue = (grid, row, col, value) => {
+        if (grid[row].includes(value)) {
+            return false;
+        }
+
+        for (let i = 0; i < 9; i++) {
+            if (grid[i][col] === value) {
+                return false;
+            }
+        }
+
+        const startRow = Math.floor(row / 3) * 3;
+        const startCol = Math.floor(col / 3) * 3;
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (grid[startRow + i][startCol + j] === value) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    };
+
+    const validateGrid = () => {
+        const incorrectIndices = [];
+
         const isValidSubGrid = (startRow, startCol) => {
             const values = new Set();
 
@@ -77,14 +103,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     const value = grid[startRow + i][startCol + j];
                     if (value !== 0) {
                         if (values.has(value)) {
-                            return false;
+                            incorrectIndices.push([startRow + i, startCol + j]);
                         }
                         values.add(value);
                     }
                 }
             }
 
-            return true;
+            return values.size === 9;
         };
 
         const isValidRow = (row) => {
@@ -94,13 +120,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const value = grid[row][i];
                 if (value !== 0) {
                     if (values.has(value)) {
-                        return false;
+                        incorrectIndices.push([row, i]);
                     }
                     values.add(value);
                 }
             }
 
-            return true;
+            return values.size === 9;
         };
 
         const isValidColumn = (col) => {
@@ -110,13 +136,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const value = grid[i][col];
                 if (value !== 0) {
                     if (values.has(value)) {
-                        return false;
+                        incorrectIndices.push([i, col]);
                     }
                     values.add(value);
                 }
             }
 
-            return true;
+            return values.size === 9;
         };
 
         for (let i = 0; i < 9; i++) {
@@ -144,20 +170,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 input.type = 'text';
                 input.className = 'sudoku-cell';
 
+                input.maxLength = 1;
+
                 input.value = grid[i][j] !== 0 ? grid[i][j] : '';
+
+                input.addEventListener('input', (event) => {
+                    const newValue = event.target.value;
+                    const lastChar = newValue.slice(-1); // Get the last entered character
+                    if (!/^[1-9]$/.test(lastChar)) {
+                        event.target.value = ''; // Remove non-numeric characters
+                    } else if (!input.disabled) {
+                        grid[i][j] = parseInt(lastChar);
+                        event.target.value = lastChar;
+                    } else {
+                        event.target.value = grid[i][j];
+                    }
+                    resetGridColor();
+                });
 
                 if (grid[i][j] !== 0) {
                     input.disabled = true;
                 }
-
-                input.addEventListener('input', (event) => {
-                    const newValue = event.target.value;
-                    if (!input.disabled) {
-                        grid[i][j] = newValue !== '' ? parseInt(newValue) : 0;
-                    } else {
-                        event.target.value = grid[i][j];
-                    }
-                });
 
                 cell.appendChild(input);
                 row.appendChild(cell);
@@ -186,10 +219,19 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const validateAndSubmitGrid = () => {
-        if (validateGrid(grid)) {
+        resetGridColor();
+
+        if (validateGrid()) {
             alert('Korrekt!');
         } else {
             alert('Forkert!');
+        }
+    };
+
+    const resetGridColor = () => {
+        const cells = document.getElementsByClassName('sudoku-cell');
+        for (const cell of cells) {
+            cell.classList.remove('incorrect');
         }
     };
 

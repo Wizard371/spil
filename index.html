@@ -17,6 +17,8 @@
         <div class="parent">
             <button id="start-button" class="open-button" onclick="openGamePopup()">QUIZ SPIL</button>
             <button id="open-popup" class="open-button">KRYDS OG BOLLE</button>
+            <button onclick="openHangmanGame()" class="open-button">HANGMAN</button>
+            <button id="open-sudoku-popup" class="open-button">SUDOKU</button>
             <!-- Quiz Spil -->
             <div id="game-popup" class="game-popup">
                 <div class="game-popup-content">
@@ -63,21 +65,41 @@
 
             <!-- SODUKO -->
 
-            <button id="open-sudoku-popup" class="open-button">SUDOKU</button>
-
             <div id="popup-sudoku" class="modal" style="display: none;">
                 <div class="modal-content">
                     <table id="sudoku-grid">
+                        <!-- 123123 -->
                     </table>
                     <button id="submit-sudoku" class="sudoku-btn">Færdig</button>
-                    <button id="close-sudoku" class="sudoku-btn">Luk</button>
+                    <button id="close-sudoku" class="sudoku-btn" style="background-color: #ff1744;">Luk</button>
                 </div>
             </div>
         </div>
+
+        <!-- HANGMAN -->
+
+        <div id="hangmanModal" class="modal-hangman">
+            <div class="modal-content-hangman">
+                <span class="close" onclick="closeHangmanGame()">&times;</span>
+
+                <div class="word-container"></div>
+
+                <div class="message"></div>
+
+                <div class="guess-container">
+                    <input type="text" placeholder="Guess a letter" />
+                    <button onclick="guessLetter()">Gæt et bogstav</button>
+                </div>
+
+                <div class="wrong-letters"></div>
+            </div>
+        </div>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/he/1.2.0/he.js"></script>
         <script src="./quiz.js"></script>
         <script src="./krydsogbolle.js"></script>
         <script src="./soduko.js"></script>
+        <script src="./hangman.js"></script>
 
 </body>
 
