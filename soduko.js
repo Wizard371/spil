@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         solveSudoku();
-        removeNumbers(grid, 0.5); // Difficulty level
+        removeNumbers(grid, 0.7); // Sværhedsgrad
 
         return grid;
     };
@@ -176,9 +176,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 input.addEventListener('input', (event) => {
                     const newValue = event.target.value;
-                    const lastChar = newValue.slice(-1); // Get the last entered character
+                    const lastChar = newValue.slice(-1);
                     if (!/^[1-9]$/.test(lastChar)) {
-                        event.target.value = ''; // Remove non-numeric characters
+                        event.target.value = '';
                     } else if (!input.disabled) {
                         grid[i][j] = parseInt(lastChar);
                         event.target.value = lastChar;
@@ -203,9 +203,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const popup = document.getElementById('popup-sudoku');
     const closePopupButton = document.getElementById('close-sudoku');
     const submitButton = document.getElementById('submit-sudoku');
+    let startTime = null;
 
     const openPopup = () => {
         popup.style.display = 'block';
+        startTime = startTime || new Date();
     };
 
     const closePopup = () => {
@@ -222,7 +224,11 @@ document.addEventListener('DOMContentLoaded', () => {
         resetGridColor();
 
         if (validateGrid()) {
-            alert('Korrekt!');
+            const endTime = new Date();
+            const timeDiff = endTime - startTime;
+            const seconds = Math.floor(timeDiff / 1000);
+
+            alert('Korrekt! Det tog: ' + seconds + ' sekunder');
         } else {
             alert('Forkert!');
         }

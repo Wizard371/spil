@@ -371,6 +371,7 @@ td:hover {
     display: flex;
     display: inline;
     justify-content: space-between;
+    align-items: center;
     margin: 10px auto;
     margin-right: 30px;
     padding: 10px 20px;
@@ -382,6 +383,10 @@ td:hover {
     border-radius: 30px;
     font-family: Arial, Helvetica, sans-serif;
     border: 3px solid black;
+}
+
+input.sudoku-cell {
+    font-weight: bold;
 }
 
 
